@@ -1,0 +1,61 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <div *ngIf="cartItems.length > 0">
+        <table class="table table-bordered">
+          <tr>
+            <th width="20%">Ảnh Sản Phẩm</th>
+            <th width="50%">Chi Tiết Sản Phẩm</th>
+            <th width="30%"></th>
+          </tr>
+          <tr *ngFor="let tempCartItem of cartItems">
+            <td>
+              <img src="{{ tempCartItem.imageUrl }}" class="img-responsive" width="150px" />
+            </td>
+
+            <td>
+              <p>{{ tempCartItem.name }}</p>
+              <p>{{ tempCartItem.unitPrice | currency: 'VND' }}</p>
+            </td>
+
+            <td>
+              <div class="items">
+                <label>Số Lượng:</label>
+                <div class="row no-gutters">
+                  <div class="col">
+                    <button (click)="incrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <div class="col ml-4 mr-2">{{ tempCartItem.quantity }}</div>
+                  <div class="col">
+                    <button (click)="decrementQuantity(tempCartItem)" class="btn btn-primary btn-sm">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                  <div class="col-8">
+                    <button (click)="remove(tempCartItem)" class="btn btn-primary btn-sm">Xoá</button>
+                  </div>
+                </div>
+              </div>
+
+              <p class="mt-2">Tổng cộng: {{ tempCartItem.quantity * tempCartItem.unitPrice | currency: 'VND' }}</p>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2"></td>
+            <td style="font-weight: bold">
+              <p>Tổng số lượng: {{ totalQuantity }}</p>
+              <p>FREE SHIPPING</p>
+              <p>Tổng cộng giá tiền: {{ totalPrice | currency: 'VND' }}</p>
+              <a routerLink="/checkout" class="btn btn-primary">Xác Nhận Mua Hàng</a>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div *ngIf="cartItems.length == 0" class="alert alert-warning col-md-12" role="alert">
+        Giỏ hàng của bạn đang trống.
+      </div>
+    </div>
+  </div>
+</div>

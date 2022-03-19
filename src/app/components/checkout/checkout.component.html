@@ -1,0 +1,375 @@
+<div class="main-content">
+  <div class="section-content section-content-p30">
+    <div class="container-fluid">
+      <form [formGroup]="checkoutFormGroup" (ngSubmit)="onSubmit()">
+        <!-- KHÁCH HÀNG -->
+
+        <div formGroupName="customer" class="form-area">
+          <h3>Khách Hàng</h3>
+
+          <div class="row">
+            <div class="col-md-2"><label>Họ Và Tên Lót</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input formControlName="firstName" type="text" />
+                <div
+                  *ngIf="firstName.invalid && (firstName.dirty || firstName.touched)"
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="firstName.errors['required'] || firstName.errors['notOnlyWhiteSpace']">
+                    Họ Và Tên Lót không được bỏ trống!
+                  </div>
+                  <div *ngIf="firstName.errors['minlength']">Họ Và Tên Lót phải tối thiểu 2 kí tự!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Tên</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input formControlName="lastName" type="text" />
+                <div *ngIf="lastName.invalid && (lastName.dirty || lastName.touched)" class="alert alert-danger mt-1">
+                  <div *ngIf="lastName.errors['required'] || lastName.errors['notOnlyWhiteSpace']">
+                    Tên không được bỏ trống!
+                  </div>
+                  <div *ngIf="lastName.errors['minlength']">Tên phải tối thiểu 2 kí tự!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Email</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input formControlName="email" type="text" />
+                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger mt-1">
+                  <div *ngIf="email.errors['required'] || email.errors['notOnlyWhiteSpace']">
+                    Email không được bỏ trống!
+                  </div>
+                  <div *ngIf="email.errors['pattern']">Email cần phải được định dạng hợp lệ!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ĐỊA CHỈ NHẬN HÀNG -->
+
+        <div formGroupName="shippingAddress" class="form-area">
+          <h3>Địa Chỉ Nhận Hàng</h3>
+
+          <div class="row">
+            <div class="col-md-2"><label>Quốc Tịch</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="country" (change)="getStates('shippingAddress')">
+                  <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
+                </select>
+
+                <div
+                  *ngIf="
+                    shippingAddressCountry.invalid && (shippingAddressCountry.dirty || shippingAddressCountry.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="shippingAddressCountry.errors['required']">Quốc Tịch không được bỏ trống!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Đường</label></div>
+            <div class="col-md-9">
+              <div class="input-space"><input formControlName="street" type="text" /></div>
+              <div
+                *ngIf="shippingAddressStreet.invalid && (shippingAddressStreet.dirty || shippingAddressStreet.touched)"
+                class="alert alert-danger mt-1"
+              >
+                <div
+                  *ngIf="shippingAddressStreet.errors['required'] || shippingAddressStreet.errors['notOnlyWhiteSpace']"
+                >
+                  Đường không được bỏ trống!
+                </div>
+                <div *ngIf="shippingAddressStreet.errors['minlength']">Tên phải tối thiểu 2 kí tự!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Thành Phố</label></div>
+            <div class="col-md-9">
+              <div class="input-space"><input formControlName="city" type="text" /></div>
+              <div
+                *ngIf="shippingAddressCity.invalid && (shippingAddressCity.dirty || shippingAddressCity.touched)"
+                class="alert alert-danger mt-1"
+              >
+                <div *ngIf="shippingAddressCity.errors['required'] || shippingAddressCity.errors['notOnlyWhiteSpace']">
+                  Thành phố không được bỏ trống!
+                </div>
+                <div *ngIf="shippingAddressCity.errors['minlength']">Phải tối thiểu 2 kí tự!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Tỉnh</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="state">
+                  <option *ngFor="let state of shippingAddressStates" [ngValue]="state">{{ state.name }}</option>
+                </select>
+
+                <div
+                  *ngIf="shippingAddressState.invalid && (shippingAddressState.dirty || shippingAddressState.touched)"
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="shippingAddressState.errors['required']">Tỉnh không được bỏ trống!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Zipcode</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input formControlName="zipcode" type="text" />
+                <div
+                  *ngIf="
+                    shippingAddressZipcode.invalid && (shippingAddressZipcode.dirty || shippingAddressZipcode.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div
+                    *ngIf="
+                      shippingAddressZipcode.errors['required'] || shippingAddressZipcode.errors['notOnlyWhiteSpace']
+                    "
+                  >
+                    Zipcode không được bỏ trống!
+                  </div>
+                  <div *ngIf="shippingAddressZipcode.errors['minlength']">Phải tối thiểu 2 kí tự!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Add check box auto fill -->
+        <div class="input-space">
+          <mat-checkbox (change)="copyShippingToBilling($event)"
+            >Địa Chỉ Nhận Hàng Y Như Địa Chỉ Giao Hàng</mat-checkbox
+          >
+        </div>
+
+        <!-- ĐỊA CHỈ GIAO HÀNG -->
+
+        <div formGroupName="billingAddress" class="form-area">
+          <h3>Địa Chỉ Giao Hàng</h3>
+
+          <div class="row">
+            <div class="col-md-2"><label>Quốc Tịch</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="country" (change)="getStates('billingAddress')">
+                  <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
+                </select>
+                <div
+                  *ngIf="
+                    billingAddressCountry.invalid && (billingAddressCountry.dirty || billingAddressCountry.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="billingAddressCountry.errors['required']">Quốc tịch không được bỏ trống!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Đường</label></div>
+            <div class="col-md-9">
+              <div class="input-space"><input formControlName="street" type="text" /></div>
+              <div
+                *ngIf="billingAddressStreet.invalid && (billingAddressStreet.dirty || billingAddressStreet.touched)"
+                class="alert alert-danger mt-1"
+              >
+                <div
+                  *ngIf="billingAddressStreet.errors['required'] || billingAddressStreet.errors['notOnlyWhiteSpace']"
+                >
+                  Đường không được bỏ trống!
+                </div>
+                <div *ngIf="billingAddressStreet.errors['minlength']">Phải tối thiểu 2 kí tự!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Thành Phố</label></div>
+            <div class="col-md-9">
+              <div class="input-space"><input formControlName="city" type="text" /></div>
+              <div
+                *ngIf="billingAddressCity.invalid && (billingAddressCity.dirty || billingAddressCity.touched)"
+                class="alert alert-danger mt-1"
+              >
+                <div *ngIf="billingAddressCity.errors['required'] || billingAddressCity.errors['notOnlyWhiteSpace']">
+                  Thành phố không được bỏ trống!
+                </div>
+                <div *ngIf="billingAddressCity.errors['minlength']">Phải tối thiểu 2 kí tự!</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Tỉnh</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="state">
+                  <option *ngFor="let state of billingAddressStates" [ngValue]="state">{{ state.name }}</option>
+                </select>
+                <div
+                  *ngIf="billingAddressState.invalid && (billingAddressState.dirty || billingAddressState.touched)"
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="billingAddressState.errors['required']">Tỉnh không được bỏ trống!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Zipcode</label></div>
+            <div class="col-md-9">
+              <div class="input-space"><input formControlName="zipcode" type="text" /></div>
+              <div
+                *ngIf="billingAddressZipcode.invalid && (billingAddressZipcode.dirty || billingAddressZipcode.touched)"
+                class="alert alert-danger mt-1"
+              >
+                <div
+                  *ngIf="billingAddressZipcode.errors['required'] || billingAddressZipcode.errors['notOnlyWhiteSpace']"
+                >
+                  Zipcode không được bỏ trống!
+                </div>
+                <div *ngIf="billingAddressZipcode.errors['minlength']">Phải tối thiểu 2 kí tự!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- THẺ TÍN DỤNG -->
+        <div formGroupName="creditCard" class="form-area">
+          <h3>Thẻ Thanh Toán</h3>
+
+          <div class="row">
+            <div class="col-md-2"><label>Loại Thẻ</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="cardType">
+                  <option>VISA</option>
+                  <option>MASTERCARD</option>
+                </select>
+                <div
+                  *ngIf="creditCardType.invalid && (creditCardType.dirty || creditCardType.touched)"
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="creditCardType.errors['required']">Loại thẻ không được bỏ trống!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Tên Chủ Thẻ</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input formControlName="nameOnCard" type="text" />
+                <div
+                  *ngIf="creditCardNameOnCard.invalid && (creditCardNameOnCard.dirty || creditCardNameOnCard.touched)"
+                  class="alert alert-danger mt-1"
+                >
+                  <div
+                    *ngIf="creditCardNameOnCard.errors['required'] || creditCardNameOnCard.errors['notOnlyWhiteSpace']"
+                  >
+                    Tên chủ thẻ không được bỏ trống!
+                  </div>
+                  <div *ngIf="creditCardNameOnCard.errors['minlength']">Phải tối thiểu 2 kí tự!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Số Thẻ</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input formControlName="cardNumber" type="text" />
+                <div
+                  *ngIf="creditCardNumber.invalid && (creditCardNumber.dirty || creditCardNumber.touched)"
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="creditCardNumber.errors['required']">Số thẻ không được bỏ trống!</div>
+                  <div *ngIf="creditCardNumber.errors['pattern']">Số thẻ không hợp lệ!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Mã Bảo Vệ</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <input formControlName="securityCode" type="text" />
+                <div
+                  *ngIf="
+                    creditCardSecurityCode.invalid && (creditCardSecurityCode.dirty || creditCardSecurityCode.touched)
+                  "
+                  class="alert alert-danger mt-1"
+                >
+                  <div *ngIf="creditCardSecurityCode.errors['required']">Mã bảo mật thẻ không được bỏ trống!</div>
+                  <div *ngIf="creditCardSecurityCode.errors['pattern']">Mã bảo mật thẻ không hợp lệ!</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Tháng Hết Hạn</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="expirationMonth">
+                  <option *ngFor="let month of creditCardMonths">{{ month }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-2"><label>Năm Hết Hạn</label></div>
+            <div class="col-md-9">
+              <div class="input-space">
+                <select formControlName="expirationYear" (change)="handleMonthsAndYears()">
+                  <option *ngFor="let year of creditCardYears">{{ year }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order details -->
+        <div class="form-area">
+          <h3>Tổng Quan</h3>
+          <p>Tổng số lượng: {{ totalQuantity }}</p>
+          <p>FREE SHIPPING</p>
+          <p>Tổng cộng giá tiền: {{ totalPrice | currency: 'VND' }}</p>
+        </div>
+
+        <div class="text-center">
+          <button type="submit" class="btn btn-info">Xác Nhận</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
