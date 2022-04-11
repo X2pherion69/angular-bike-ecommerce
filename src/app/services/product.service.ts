@@ -8,20 +8,24 @@ import { ProductCategory } from '../common/product-category';
   providedIn: 'root',
 })
 export class ProductService {
+  // link api backend
   private baseUrl = 'http://localhost:8080/api/products';
 
   private productCategoriesUrl = 'http://localhost:8080/api/product-category';
 
   constructor(private httpClient: HttpClient) {}
 
+  // hàm xử lý lấy sản phẩm list theo trang
   getProductListPaginate(thePage: number, thePageSize: number, theCategoryId: number): Observable<GetResponseProducts> {
     // build url based on category id, page and size
     const searchUrl =
       `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}` + `&page=${thePage}&size=${thePageSize}`;
 
+    // trả về tất cả data lấy được từ link ở trên
     return this.httpClient.get<GetResponseProducts>(searchUrl);
   }
 
+  // hàm xử lý lấy danh sách sản phẩm theo id danh mục
   getProductList(theCategoryId: number): Observable<Product[]> {
     // build url based on category id
     const searchUrl = `${this.baseUrl}/search/findByCategoryId?id=${theCategoryId}`;
@@ -29,7 +33,9 @@ export class ProductService {
     return this.getProducts(searchUrl);
   }
 
+  // hàm xử lý lấy danh mục sản phẩm
   getProductCategories(): Observable<ProductCategory[]> {
+    // trả về phương thức get từ api nhúng ở interface bên dưới được lấy từ url và thực hiện chuyển đổi dữ liệu sau đó map thành array data productCategory
     return this.httpClient
       .get<GetProductCategoriesResponse>(this.productCategoriesUrl)
       .pipe(map((response) => response._embedded.productCategory));

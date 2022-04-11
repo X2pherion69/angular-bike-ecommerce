@@ -15,6 +15,7 @@ export class CartStatusComponent implements OnInit {
   ngOnInit(): void {
     this.updateCartStatus();
   }
+  // hàm cập nhật trạng thái giỏ hàng
   updateCartStatus() {
     // subscribe to the cart totalPrice
     this.cartService.totalPrice.subscribe((data) => (this.totalPrice = data));

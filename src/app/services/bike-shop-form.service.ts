@@ -27,7 +27,7 @@ export class BikeShopFormService {
   getCreditCardMonths(startMonth: number): Observable<number[]> {
     let data: number[] = [];
 
-    // buiid an array for month dropdown list
+    // build an array for month dropdown list
     // - start at desired startMoth and loop until 12
     for (let theMonth = startMonth; theMonth <= 12; theMonth++) {
       data.push(theMonth);
@@ -37,7 +37,7 @@ export class BikeShopFormService {
   getCreditCardYears(): Observable<number[]> {
     let data: number[] = [];
 
-    // buiid an array for month dropdown list
+    // build an array for month dropdown list
     // - start at desired startMoth and loop until 12
     const startYear: number = new Date().getFullYear();
     const endYear: number = startYear + 10;

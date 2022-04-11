@@ -370,7 +370,7 @@ input.au-input.au-input-xl{
 .navbar-sidebar .navbar-list li a{
     display:block;
     color:#555;
-    font-size:16px;
+    font-size:12px;
     padding:5px 0
 }
 
@@ -379,7 +379,11 @@ input.au-input.au-input-xl{
 }
 
 .navbar-sidebar .navbar-list li a:hover{
-    color:#0da8e4
+    color: white;
+}
+
+.li-mgb-10{
+  margin-bottom: 20px;
 }
 
 /*
